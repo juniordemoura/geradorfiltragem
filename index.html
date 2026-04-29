@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gerador de Currículo | Tech-ZL · ADS 2026</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+
+    <!-- ========== NAVBAR ========== -->
+    <header class="navbar">
+      <div class="navbar__inner">
+        <a href="index.html" class="navbar__logo">
+          TECH-ZL <span>Gerador de Currículo</span>
+        </a>
+        <nav class="navbar__links">
+          <a href="#formulario">Formulário</a>
+          <a href="#preview">Preview</a>
+          <a href="empresa.html" class="navbar__link--destaque">Para Empresas →</a>
+          <button class="btn btn--outline" id="btn-exportar-pdf">Exportar PDF ↓</button>
+          <button class="btn btn--primary" id="btn-exportar">Exportar HTML ↓</button>
+        </nav>
+        <button class="navbar__hamburger" id="hamburger" aria-label="Abrir menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+      <div class="navbar__mobile" id="mobile-menu">
+        <a href="#formulario" onclick="fecharMenu()">Formulário</a>
+        <a href="#preview" onclick="fecharMenu()">Preview</a>
+        <a href="empresa.html" onclick="fecharMenu()">Para Empresas →</a>
+        <button class="btn btn--outline" onclick="exportarPDF(); fecharMenu()">Exportar PDF ↓</button>
+        <button class="btn btn--primary" onclick="exportarCV(); fecharMenu()">Exportar HTML ↓</button>
+      </div>
+    </header>
+
+    <!-- ========== HERO ========== -->
+    <section class="hero">
+      <div class="hero__texto">
+        <p class="hero__eyebrow">Gerador de Currículo Gratuito · ADS 2026</p>
+        <h1 class="hero__titulo">
+          Monte seu <span class="hero__destaque">Currículo</span>
+          profissional
+        </h1>
+        <p class="hero__sub">
+          Preencha o formulário, visualize em tempo real e exporte em
+          <strong>PDF</strong> ou HTML — pronto para usar.
+        </p>
+        <div class="hero__acoes">
+          <a href="#formulario" class="btn btn--primary btn--lg">Começar agora →</a>
+          <a href="#preview" class="btn btn--ghost btn--lg">Ver preview</a>
+        </div>
+      </div>
+      <div class="hero__visual" aria-hidden="true">
+        <div class="hero__circulo hero__circulo--1"></div>
+        <div class="hero__circulo hero__circulo--2"></div>
+        <div class="hero__circulo hero__circulo--3"></div>
+        <div class="hero__tag hero__tag--1">HTML5</div>
+        <div class="hero__tag hero__tag--2">CSS3</div>
+        <div class="hero__tag hero__tag--3">JavaScript</div>
+        <div class="hero__tag hero__tag--4">ADS</div>
+      </div>
+    </section>
+
+    <!-- ========== MAIN: FORM + PREVIEW ========== -->
+    <main class="main" id="formulario">
+
+      <!-- PAINEL FORMULÁRIO -->
+      <aside class="painel-form">
+        <div class="painel-form__topo">
+          <h2 class="painel-form__titulo">Seus dados</h2>
+          <span class="painel-form__hint">Edite e veja ao vivo →</span>
+        </div>
+
+        <!-- ABAS -->
+        <div class="abas" role="tablist">
+          <button class="aba aba--ativa" data-aba="pessoal" role="tab">Pessoal</button>
+          <button class="aba" data-aba="experiencia" role="tab">Experiência</button>
+          <button class="aba" data-aba="educacao" role="tab">Educação</button>
+          <button class="aba" data-aba="extras" role="tab">Extras</button>
+        </div>
+
+        <!-- ABA PESSOAL -->
+        <div class="aba-conteudo aba-conteudo--ativa" id="aba-pessoal" role="tabpanel">
+          <div class="campo">
+            <label for="nome">Nome completo <span class="obrig">*</span></label>
+            <input type="text" id="nome" placeholder="Ex: Mauricio Junior" />
+          </div>
+          <div class="campo">
+            <label for="cargo">Cargo / Título profissional</label>
+            <input type="text" id="cargo" placeholder="Ex: Desenvolvedor Front-End | Estudante de ADS" />
+          </div>
+          <div class="campo-linha">
+            <div class="campo">
+              <label for="email">E-mail</label>
+              <input type="email" id="email" placeholder="seu@email.com" />
+            </div>
+            <div class="campo">
+              <label for="telefone">Telefone</label>
+              <input type="tel" id="telefone" placeholder="(11) 99999-0000" />
+            </div>
+          </div>
+          <div class="campo-linha">
+            <div class="campo">
+              <label for="cidade">Cidade / Estado</label>
+              <input type="text" id="cidade" placeholder="São Paulo, SP" />
+            </div>
+            <div class="campo">
+              <label for="linkedin">LinkedIn</label>
+              <input type="text" id="linkedin" placeholder="linkedin.com/in/perfil" />
+            </div>
+          </div>
+          <div class="campo-linha">
+            <div class="campo">
+              <label for="github">GitHub</label>
+              <input type="text" id="github" placeholder="github.com/usuario" />
+            </div>
+            <div class="campo">
+              <label for="instagram">Instagram</label>
+              <input type="text" id="instagram" placeholder="instagram.com/perfil" />
+            </div>
+          </div>
+          <div class="campo">
+            <label for="resumo">Sobre mim / Resumo profissional</label>
+            <textarea id="resumo" rows="5" placeholder="Descreva seu perfil, objetivos e diferenciais..."></textarea>
+          </div>
+        </div>
+
+        <!-- ABA EXPERIÊNCIA -->
+        <div class="aba-conteudo" id="aba-experiencia" role="tabpanel">
+          <div id="lista-experiencias"></div>
+          <button class="btn-adicionar" onclick="adicionarExperiencia()">
+            <span class="btn-adicionar__icone">+</span>
+            Adicionar experiência
+          </button>
+        </div>
+
+        <!-- ABA EDUCAÇÃO -->
+        <div class="aba-conteudo" id="aba-educacao" role="tabpanel">
+          <div id="lista-educacao"></div>
+          <button class="btn-adicionar" onclick="adicionarEducacao()">
+            <span class="btn-adicionar__icone">+</span>
+            Adicionar formação
+          </button>
+          <div class="campo" style="margin-top: 20px;">
+            <label for="cursos">Cursos e certificados <small>(um por linha)</small></label>
+            <textarea id="cursos" rows="4" placeholder="HTML5&#10;CSS3&#10;JavaScript&#10;Git e GitHub"></textarea>
+          </div>
+        </div>
+
+        <!-- ABA EXTRAS -->
+        <div class="aba-conteudo" id="aba-extras" role="tabpanel">
+          <div class="campo">
+            <label for="habilidades">Habilidades técnicas <small>(separadas por vírgula)</small></label>
+            <input type="text" id="habilidades" placeholder="HTML5, CSS3, JavaScript, Git, GitHub" />
+          </div>
+          <div class="campo">
+            <label for="idiomas">Idiomas <small>(separados por vírgula)</small></label>
+            <input type="text" id="idiomas" placeholder="Português (Nativo), Inglês (Básico)" />
+          </div>
+          <div class="campo">
+            <label for="mensagem">Por que devo ser contratado?</label>
+            <textarea id="mensagem" rows="5" placeholder="Sua mensagem de destaque..."></textarea>
+          </div>
+        </div>
+
+        <!-- AÇÕES -->
+        <div class="form-acoes">
+          <button class="btn btn--ghost" onclick="limparFormulario()">Limpar tudo</button>
+          <button class="btn btn--outline" onclick="exportarPDF()">PDF ↓</button>
+          <button class="btn btn--primary" onclick="exportarCV()">HTML ↓</button>
+        </div>
+      </aside>
+
+      <!-- PAINEL PREVIEW -->
+      <section class="painel-preview" id="preview">
+        <div class="painel-preview__topo">
+          <h2 class="painel-preview__titulo">Preview em tempo real</h2>
+          <span class="badge-live">
+            <span class="badge-live__ponto"></span>
+            Ao vivo
+          </span>
+        </div>
+        <div class="cv-moldura">
+          <div id="cv-preview" class="cv">
+            <!-- Gerado pelo script.js -->
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="footer">
+      <p>
+        Desenvolvido por <strong><a href="https://github.com/juniordemoura" target="_blank">Mauricio Junior</a></strong> ·
+        Gerador de Currículo · 2026
+      </p>
+      <p class="footer__sub">HTML · CSS · JavaScript · ADS 2026</p>
+    </footer>
+
+    <!-- html2pdf.js para exportação em PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

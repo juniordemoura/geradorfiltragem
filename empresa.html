@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Triagem com IA | Tech-ZL · ADS 2026</title>
+    <link rel="stylesheet" href="empresa.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+
+    <!-- ========== NAVBAR ========== -->
+    <header class="navbar">
+      <div class="navbar__inner">
+        <a href="index.html" class="navbar__logo">
+          TECH-ZL <span>Triagem com IA</span>
+        </a>
+        <nav class="navbar__links">
+          <a href="index.html">← Para Candidatos</a>
+          <a href="#passo-1">Vagas</a>
+          <a href="#passo-2">Prompts</a>
+          <a href="#passo-3">Triagem</a>
+          <button class="btn btn--outline btn--sm" onclick="abrirConfigApi()">⚙ Configurar API</button>
+        </nav>
+        <button class="navbar__hamburger" id="hamburger" aria-label="Abrir menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+      <div class="navbar__mobile" id="mobile-menu">
+        <a href="index.html" onclick="fecharMenu()">← Para Candidatos</a>
+        <a href="#passo-1" onclick="fecharMenu()">Vagas</a>
+        <a href="#passo-2" onclick="fecharMenu()">Prompts</a>
+        <a href="#passo-3" onclick="fecharMenu()">Triagem</a>
+        <button class="btn btn--outline btn--sm" onclick="abrirConfigApi(); fecharMenu()">⚙ Configurar API</button>
+      </div>
+    </header>
+
+    <!-- ========== MODAL API KEY ========== -->
+    <div class="modal-overlay" id="modal-api" onclick="fecharConfigApi(event)">
+      <div class="modal">
+        <div class="modal__header">
+          <h3 class="modal__titulo">⚙ Configurar Chave de API</h3>
+          <button class="modal__fechar" onclick="fecharConfigApi()">✕</button>
+        </div>
+        <p class="modal__desc">
+          Para usar a triagem com IA, insira sua chave de API da Anthropic (Claude).<br>
+          A chave é armazenada <strong>apenas nesta sessão</strong> e nunca é enviada a terceiros.
+        </p>
+        <div class="campo">
+          <label for="api-key-input">Chave de API Anthropic</label>
+          <input type="password" id="api-key-input" placeholder="sk-ant-api03-..." autocomplete="off" />
+        </div>
+        <p class="modal__link">
+          Não tem uma chave? Acesse
+          <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a>
+          para criar gratuitamente.
+        </p>
+        <div class="modal__acoes">
+          <button class="btn btn--ghost" onclick="fecharConfigApi()">Cancelar</button>
+          <button class="btn btn--primary" onclick="salvarApiKey()">Salvar e fechar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== HERO ========== -->
+    <section class="hero-empresa">
+      <div class="hero-empresa__conteudo">
+        <span class="hero-empresa__badge">Para Empresas · ADS 2026</span>
+        <h1 class="hero-empresa__titulo">
+          Triagem Inteligente<br>
+          <span class="hero-empresa__destaque">com Inteligência Artificial</span>
+        </h1>
+        <p class="hero-empresa__sub">
+          Cadastre suas vagas, gere prompts de seleção profissionais e deixe a IA do Claude
+          analisar e classificar os candidatos automaticamente — economizando horas de trabalho.
+        </p>
+        <div class="hero-empresa__passos">
+          <div class="passo-mini">
+            <span class="passo-mini__num">1</span>
+            <span>Cadastre as vagas</span>
+          </div>
+          <div class="passo-mini__seta">→</div>
+          <div class="passo-mini">
+            <span class="passo-mini__num">2</span>
+            <span>Gere os prompts</span>
+          </div>
+          <div class="passo-mini__seta">→</div>
+          <div class="passo-mini">
+            <span class="passo-mini__num">3</span>
+            <span>IA faz a triagem</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== MAIN ========== -->
+    <main class="main-empresa">
+
+      <!-- ======== PASSO 1: VAGAS ======== -->
+      <section class="step-card" id="passo-1">
+        <div class="step-card__header">
+          <div class="step-num">1</div>
+          <div>
+            <h2 class="step-card__titulo">Cadastre a Empresa e as Vagas</h2>
+            <p class="step-card__desc">Preencha os dados da empresa e adicione quantas vagas precisar.</p>
+          </div>
+        </div>
+
+        <!-- Dados da empresa -->
+        <div class="empresa-dados">
+          <div class="campo-linha">
+            <div class="campo">
+              <label for="nome-empresa">Nome da empresa <span class="obrig">*</span></label>
+              <input type="text" id="nome-empresa" placeholder="Ex: Empresa Inovadora S.A." oninput="atualizarPrompts()" />
+            </div>
+            <div class="campo">
+              <label for="setor-empresa">Setor / Área de atuação</label>
+              <input type="text" id="setor-empresa" placeholder="Ex: Tecnologia, Finanças, Saúde..." oninput="atualizarPrompts()" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Lista de vagas -->
+        <div id="lista-vagas"></div>
+
+        <button class="btn-adicionar" onclick="adicionarVaga()">
+          <span class="btn-adicionar__icone">+</span>
+          Adicionar vaga
+        </button>
+
+        <div class="step-acoes">
+          <button class="btn btn--ghost" onclick="limparTudo()">Limpar tudo</button>
+          <button class="btn btn--primary" onclick="gerarPrompts()">
+            Gerar Prompts para todas as vagas →
+          </button>
+        </div>
+      </section>
+
+      <!-- ======== PASSO 2: PROMPTS GERADOS ======== -->
+      <section class="step-card" id="passo-2" style="display:none;">
+        <div class="step-card__header">
+          <div class="step-num">2</div>
+          <div>
+            <h2 class="step-card__titulo">Prompts de Triagem Gerados</h2>
+            <p class="step-card__desc">
+              Copie o prompt desejado e use-o em qualquer IA, ou vá ao Passo 3 para triagem automática aqui mesmo.
+            </p>
+          </div>
+        </div>
+        <div id="lista-prompts"></div>
+        <div class="step-acoes">
+          <button class="btn btn--ghost" onclick="voltarPasso1()">← Editar vagas</button>
+          <button class="btn btn--primary" onclick="irParaPasso3()">
+            Triagem automática com IA →
+          </button>
+        </div>
+      </section>
+
+      <!-- ======== PASSO 3: TRIAGEM COM IA ======== -->
+      <section class="step-card" id="passo-3" style="display:none;">
+        <div class="step-card__header">
+          <div class="step-num">3</div>
+          <div>
+            <h2 class="step-card__titulo">Triagem Automática com IA</h2>
+            <p class="step-card__desc">
+              Selecione a vaga, cole os currículos dos candidatos e clique em analisar.
+            </p>
+          </div>
+        </div>
+
+        <!-- Aviso API -->
+        <div class="aviso-api" id="aviso-api">
+          <span class="aviso-api__icone">🔑</span>
+          <span>
+            Para usar a triagem com IA você precisa configurar sua chave de API Anthropic.
+            <button class="link-btn" onclick="abrirConfigApi()">Configurar agora →</button>
+          </span>
+        </div>
+
+        <div class="campo">
+          <label for="select-vaga-analise">Vaga para análise</label>
+          <select id="select-vaga-analise">
+            <option value="">Selecione uma vaga...</option>
+          </select>
+        </div>
+
+        <div class="campo">
+          <label for="texto-cvs">
+            Currículos dos candidatos
+            <small>(cole um por vez ou separe com "---" para analisar múltiplos)</small>
+          </label>
+          <textarea
+            id="texto-cvs"
+            rows="12"
+            placeholder="Cole aqui o texto dos currículos dos candidatos. Para múltiplos candidatos, separe cada um com:
+
+---
+
+Candidato 1:
+Nome: João Silva
+Email: joao@email.com
+Habilidades: JavaScript, React, Node.js
+Experiência: 3 anos como desenvolvedor frontend...
+
+---
+
+Candidato 2:
+Nome: Maria Santos
+..."></textarea>
+        </div>
+
+        <div class="step-acoes">
+          <button class="btn btn--ghost" onclick="voltarPasso2()">← Ver prompts</button>
+          <button class="btn btn--primary btn--lg" id="btn-analisar" onclick="analisarCandidatos()">
+            🤖 Analisar com IA
+          </button>
+        </div>
+
+        <!-- RESULTADOS -->
+        <div id="resultado-analise" class="resultado-analise"></div>
+      </section>
+
+    </main>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="footer">
+      <p>
+        Desenvolvido por <strong><a href="https://github.com/juniordemoura" target="_blank">Mauricio Junior</a></strong> ·
+        Triagem com IA · 2026
+      </p>
+      <p class="footer__sub">HTML · CSS · JavaScript · Claude AI · ADS 2026</p>
+    </footer>
+
+    <script src="empresa.js"></script>
+  </body>
+</html>
